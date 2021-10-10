@@ -30,8 +30,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: embeddedflutter.jfrog.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.JF_TOKEN }}
+          username: ${{ secrets.JF_USERNAME }}
+          password: ${{ secrets.JF_PASSWORD }}
       -
         name: Build and push
         id: docker_build
