@@ -41,7 +41,7 @@ jobs:
           file: ./Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags:  embeddedflutter.jfrog.io/default-docker-virtual/default-docker-virtual:desktop:latest
+          tags:  desktop
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
       -
