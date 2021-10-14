@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  build:
+  build1:
     runs-on: ubuntu-latest
     steps:
       - 
@@ -37,3 +37,14 @@ jobs:
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+  build2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build, Tag, Push
+        uses: mattdavis0351/actions/docker-gpr@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          image-name: ubuntu-20-dev
+          dockerfile-location: ./Dockerfile
+          tag: latest
