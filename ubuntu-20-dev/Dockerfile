@@ -79,4 +79,6 @@ RUN set -ex \
   && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
   && rm -rf cmake-${CMAKE_VERSION}*
 
+ENV SHELL /bin/bash
+
 RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
