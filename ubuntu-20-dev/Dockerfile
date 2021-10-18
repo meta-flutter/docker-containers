@@ -47,8 +47,6 @@ ENV LANG en_US.UTF-8
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 RUN apt-get update && apt-get install -y git-lfs
 
-RUN chsh -s /bin/bash dev
-
 USER dev
 
 WORKDIR /home/dev
@@ -78,7 +76,5 @@ RUN set -ex \
   && mkdir -p /home/dev/cmake \
   && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
   && rm -rf cmake-${CMAKE_VERSION}*
-
-ENV SHELL /bin/bash
 
 RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
