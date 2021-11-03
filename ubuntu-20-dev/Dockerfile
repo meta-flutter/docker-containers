@@ -20,7 +20,8 @@ RUN apt-get update && apt-get install -y tzdata gawk wget git-core diffstat \
             nano gettext cmake libjson-c-dev libmicrohttpd-dev rapidjson-dev \
             libegl1-mesa libsdl1.2-dev libxkbcommon-dev \
             xsltproc docbook-utils fop dblatex xmlto \
-            lsb-release wget software-properties-common rsync srecord
+            lsb-release wget software-properties-common rsync srecord \
+            lz4 zstd
 
 RUN pip3 install virtualenv
 
