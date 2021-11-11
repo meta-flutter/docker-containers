@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y tzdata gawk wget git-core diffstat \
             libegl1-mesa libsdl1.2-dev libxkbcommon-dev \
             xsltproc docbook-utils fop dblatex xmlto \
             lsb-release wget software-properties-common rsync srecord \
-            lz4 zstd
+            lz4 zstd libmpc-dev pylint
 
 RUN pip3 install virtualenv
 
