@@ -9,6 +9,8 @@ ARG RUNNER_UID=1018
 
 USER root
 
+RUN agp-get update && apt install -y lsb-release wget software-properties-common
+
 RUN apt-get update && \
     apt-get install -y gawk wget git-core diffstat \
                        unzip texinfo gcc-multilib build-essential \
