@@ -9,7 +9,7 @@ ARG RUNNER_UID=1018
 
 USER root
 
-RUN agt-get update && \
+RUN apt-get update && \
     apt-get install -y lsb-release wget software-properties-common
 
 RUN apt-get update && \
