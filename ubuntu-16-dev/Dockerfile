@@ -32,15 +32,14 @@ RUN pip3 install virtualenv
 # Desktop specific
 
 # clang 12
-RUN wget https://apt.llvm.org/llvm.sh
-RUN chmod +x llvm.sh
-RUN ./llvm.sh 12
+# RUN wget https://apt.llvm.org/llvm.sh
+# RUN chmod +x llvm.sh
+# RUN ./llvm.sh 12
 
 RUN apt-get install -y libwayland-dev wayland-protocols \
             mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev mesa-utils \
             libcurl4-openssl-dev libjpeg-turbo8-dev libpng-dev libsqlite3-dev \
-            libssl-dev libfreetype6-dev libharfbuzz-dev libxi-dev \
-            libc++-12-dev libc++abi-12-dev libunwind-dev ninja-build
+            libssl-dev libfreetype6-dev libharfbuzz-dev libxi-dev
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
 RUN chown -R dev:dev /home/dev
