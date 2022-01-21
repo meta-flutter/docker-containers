@@ -42,7 +42,8 @@ RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
 # make /bin/sh symlink to bash instead of dash:
-RUN ln -sf /bin/bash /bin/sh
+RUN rm /bin/sh
+RUN ln -s /bin/bash /bin/sh
 ENV SHELL /bin/bash
 
 USER dev
@@ -56,8 +57,6 @@ RUN git config --global credential.helper 'cache --timeout 3600'
 RUN git config --global core.autocrlf false
 RUN git config --global core.filemode false
 RUN git config --global color.ui false
-
-SHELL ["/bin/bash", "-c"]
 
 RUN echo $'[protocol] \n\
         version = 2  \n\
@@ -82,4 +81,4 @@ RUN set -ex \
   && curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo \
   && chmod a+x /home/dev/bin/repo
 
-RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
+RUN echo 'export PATH=/home/dev/bin:$PATH' >> /home/dev/.bashrc
