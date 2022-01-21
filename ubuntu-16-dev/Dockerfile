@@ -1,6 +1,5 @@
 FROM ubuntu:16.04
 
-ARG CMAKE_VERSION=3.19.0
 ARG TZ=America/Los_Angeles
 ARG DEBIAN_FRONTEND=noninteractive
 ARG USER_NAME="Joel Winarske"
@@ -29,17 +28,11 @@ RUN apt-get update && \
 
 RUN pip3 install virtualenv
 
-# Desktop specific
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+RUN apt-get update && apt-get install -y git-lfs
 
-# clang 12
-# RUN wget https://apt.llvm.org/llvm.sh
-# RUN chmod +x llvm.sh
-# RUN ./llvm.sh 12
-
-RUN apt-get install -y libwayland-dev wayland-protocols \
-            mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev mesa-utils \
-            libcurl4-openssl-dev libjpeg-turbo8-dev libpng-dev libsqlite3-dev \
-            libssl-dev libfreetype6-dev libharfbuzz-dev libxi-dev
+RUN apt autoremove
+RUN apt autoclean
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
 RUN chown -R dev:dev /home/dev
@@ -48,8 +41,9 @@ RUN locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
 
-RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
-RUN apt-get update && apt-get install -y git-lfs
+# make /bin/sh symlink to bash instead of dash:
+RUN ln -sf /bin/bash /bin/sh
+ENV SHELL /bin/bash
 
 USER dev
 
@@ -58,11 +52,28 @@ WORKDIR /home/dev
 RUN echo '/home/dev/.ssh/id_rsa' | ssh-keygen -t rsa -b 2048 -C "${USER_EMAIL}"
 RUN git config --global user.email ${USER_EMAIL}
 RUN git config --global user.name "${USER_NAME}"
+RUN git config --global credential.helper 'cache --timeout 3600'
+RUN git config --global core.autocrlf false
+RUN git config --global core.filemode false
+RUN git config --global color.ui false
 
-RUN set -ex \
-  && for key in C6C265324BBEBDC350B513D02D2CEF1034921684; do \
-    gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" ; \
-  done
+SHELL ["/bin/bash", "-c"]
+
+RUN echo $'[protocol] \n\
+        version = 2  \n\
+[url "https://private.source.codeaurora.org/"] \n\
+        insteadOf = ssh://git.codeaurora.org:9222  \n\
+        insteadOf = ssh://git.codeaurora.org  \n\
+        insteadOf = ssh://privgit.codeaurora.org:9222  \n\
+        insteadOf = ssh://privgit.codeaurora.org  \n\
+        insteadOf = ssh://git@git.codeaurora.org:9222  \n\
+        insteadOf = ssh://git@git.codeaurora.org  \n\
+        insteadOf = ssh://git@privgit.codeaurora.org:9222  \n\
+        insteadOf = ssh://git@privgit.codeaurora.org  \n\
+[url "https://source.codeaurora.org/"]  \n\
+        insteadOf = git://codeaurora.org' >> /home/dev/.gitconfig
+
+RUN git config --global --list
 
 # install for python 2
 RUN set -ex \
@@ -70,15 +81,5 @@ RUN set -ex \
   && export PATH=/home/dev/bin:$PATH \
   && curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo \
   && chmod a+x /home/dev/bin/repo
-
-RUN set -ex \
-  && curl -fsSLO --compressed https://cmake.org/files/v3.19/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz \
-  && curl -fsSLO --compressed https://cmake.org/files/v3.19/cmake-${CMAKE_VERSION}-SHA-256.txt.asc \
-  && curl -fsSLO --compressed https://cmake.org/files/v3.19/cmake-${CMAKE_VERSION}-SHA-256.txt \
-  && gpg --verify cmake-${CMAKE_VERSION}-SHA-256.txt.asc cmake-${CMAKE_VERSION}-SHA-256.txt \
-  && grep "cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz\$" cmake-${CMAKE_VERSION}-SHA-256.txt | sha256sum -c - \
-  && mkdir -p /home/dev/cmake \
-  && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
-  && rm -rf cmake-${CMAKE_VERSION}*
 
 RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
