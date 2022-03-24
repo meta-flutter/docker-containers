@@ -41,6 +41,9 @@ RUN locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
 
+RUN rm /bin/sh
+RUN ln -s /bin/bash /bin/sh
+
 USER dev
 
 WORKDIR /home/dev
@@ -52,20 +55,6 @@ RUN git config --global credential.helper 'cache --timeout 3600'
 RUN git config --global core.autocrlf false
 RUN git config --global core.filemode false
 RUN git config --global color.ui false
-
-RUN echo $'[protocol] \n\
-        version = 2  \n\
-[url "https://private.source.codeaurora.org/"] \n\
-        insteadOf = ssh://git.codeaurora.org:9222  \n\
-        insteadOf = ssh://git.codeaurora.org  \n\
-        insteadOf = ssh://privgit.codeaurora.org:9222  \n\
-        insteadOf = ssh://privgit.codeaurora.org  \n\
-        insteadOf = ssh://git@git.codeaurora.org:9222  \n\
-        insteadOf = ssh://git@git.codeaurora.org  \n\
-        insteadOf = ssh://git@privgit.codeaurora.org:9222  \n\
-        insteadOf = ssh://git@privgit.codeaurora.org  \n\
-[url "https://source.codeaurora.org/"]  \n\
-        insteadOf = git://codeaurora.org' >> /home/dev/.gitconfig
 
 RUN git config --global --list
 
