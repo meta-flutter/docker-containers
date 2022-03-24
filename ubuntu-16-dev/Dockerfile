@@ -12,7 +12,7 @@ RUN apt-get update && \
     apt-get install -y lsb-release wget software-properties-common
 
 RUN apt-get update && \
-    apt-get install -y gawk wget git-core diffstat \
+    apt-get install -y bash gawk wget git-core diffstat \
                        unzip texinfo gcc-multilib build-essential \
                        chrpath socat cpio python \
                        python3-pexpect xz-utils debianutils \
