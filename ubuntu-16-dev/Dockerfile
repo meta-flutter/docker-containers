@@ -44,7 +44,6 @@ ENV LANG en_US.UTF-8
 # make /bin/sh symlink to bash instead of dash:
 RUN rm /bin/sh
 RUN ln -s /bin/bash /bin/sh
-ENV SHELL /bin/bash
 
 USER dev
 
