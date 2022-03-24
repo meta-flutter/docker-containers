@@ -41,10 +41,6 @@ RUN locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
 
-# make /bin/sh symlink to bash instead of dash:
-RUN rm /bin/sh
-RUN ln -s /bin/bash /bin/sh
-
 USER dev
 
 WORKDIR /home/dev
