@@ -78,7 +78,7 @@ RUN git config --global --list
 RUN set -ex \
   && mkdir -p /home/dev/bin \
   && export PATH=/home/dev/bin:$PATH \
-  && curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo \
+  && curl https://git.codelinaro.org/clo/tools/repo/-/raw/aosp-new/repo-1/repo > ~/bin/repo \
   && chmod a+x /home/dev/bin/repo
 
 RUN echo 'export PATH=/home/dev/bin:$PATH' >> /home/dev/.bashrc
