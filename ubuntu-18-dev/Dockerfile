@@ -23,7 +23,7 @@ RUN apt-get install -y libncurses5 libncurses5-dev libncursesw5-dev libssl-dev \
 RUN apt-get install -y coreutils bsdmainutils sed curl bc lrzsz corkscrew nano \
                        cvs subversion mercurial nfs-common nfs-kernel-server \
                        libarchive-zip-perl dos2unix texi2html diffstat libxml2-utils nano \
-                       lrzsz repo rsync srecord
+                       lz4 zstd lrzsz repo rsync srecord
 
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
