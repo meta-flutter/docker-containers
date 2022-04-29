@@ -42,8 +42,8 @@ RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
 WORKDIR /bin
-RUN rm sh
-RUN ln -s bash sh
+#RUN rm sh
+#RUN ln -s bash sh
 
 USER dev
 
