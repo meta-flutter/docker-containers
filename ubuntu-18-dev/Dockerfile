@@ -25,7 +25,7 @@ RUN apt-get install -y coreutils bsdmainutils sed curl bc lrzsz corkscrew nano \
                        libarchive-zip-perl dos2unix texi2html diffstat libxml2-utils nano \
                        lrzsz repo rsync srecord
 
-RUN apt-get install -y liblz4-1 python3-lz4 libzstd1 zstd
+RUN apt-get install -y liblz4-tool zstd
 
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
