@@ -16,46 +16,28 @@ jobs:
       contents: read
 
     steps:
-
       - uses: actions/checkout@v2
 
+      - name: Setup JArtifactory
+        uses: jfrog/setup-jfrog-cli@v2
+        env:
+          JF_ENV_1: ${{ secrets.JF_SECRET_ENV_1 }}
+
       - name: Build image
-        run: docker build . --file ubuntu-20-dev/Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-      - name: Push image ghcr.io
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-
-      - name: Push to eflutter.jfrog.io
-        run: |
-          IMAGE_ID=eflutter.jfrog.io/containers-docker/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
           echo "${{ secrets.JF_TOKEN }}" | docker login eflutter.jfrog.io -u ${{ secrets.JF_USER }} --password-stdin
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+
+          docker buildx install
+          echo "*** docker build start ***"
+          IMAGE_ID=eflutter.jfrog.io/containers-docker/$IMAGE_NAME
+          docker build --platform=linux/amd64 --tag=$IMAGE_ID -f=ubuntu-20-dev/Dockerfile --metadata-file=build-metadata --push .
+          echo "*** docker build end ***"
+          jf rt ping
+          jf c add eflutter
+          echo "*** build-docker-create start ***"
+          jf rt build-docker-create containers-docker --server-id=eflutter --image-file build-metadata --build-name ${GITHUB_JOB} --build-number ${GITHUB_RUN_ID}
+          echo "*** build-docker-create end ***"
+          echo "*** build-publish start ***"
+          jf rt build-publish --server-id=eflutter  ${GITHUB_JOB} ${GITHUB_RUN_ID}
+          echo "*** build-publish end ***"
+          docker buildx uninstall
