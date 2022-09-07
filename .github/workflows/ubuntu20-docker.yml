@@ -10,7 +10,7 @@ env:
 jobs:
 
   ubuntu-20-dev:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
