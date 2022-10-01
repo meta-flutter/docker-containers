@@ -32,4 +32,4 @@ jobs:
           file: ubuntu-16-dev/Dockerfile
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: meta-flutter/ubuntu-16-dev:main
+          tags: meta-flutter/ubuntu-16-dev:latest
