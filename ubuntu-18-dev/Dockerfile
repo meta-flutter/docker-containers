@@ -12,10 +12,17 @@ RUN apt-get update && apt-get install -y apt-utils
 
 RUN apt-get install -y gawk wget git-core diffstat unzip texinfo gcc-multilib \
                        build-essential chrpath socat cpio python3 python3-pip python3-pexpect \
-                       xz-utils debianutils iputils-ping locales lsb-release software-properties-common \
-                       python3-git python3-jinja2 libegl1-mesa libsdl1.2-dev pylint3 pylint xterm
+                       xz-utils debianutils iputils-ping
+
+RUN apt-get install -y libsdl1.2-dev xterm
 
 RUN apt-get install -y make xsltproc docbook-utils fop dblatex xmlto
+
+RUN apt-get install -y python-git realpath gettext
+
+RUN apt-get install -y locales lsb-release software-properties-common \
+                       python3-git python3-jinja2 libegl1-mesa pylint3 pylint
+
 RUN apt-get install -y libncurses5 libncurses5-dev libncursesw5-dev libssl-dev \
                        linux-headers-generic u-boot-tools device-tree-compiler \
                        bison flex g++ libyaml-dev libmpc-dev libgmp-dev
@@ -27,6 +34,9 @@ RUN apt-get install -y coreutils bsdmainutils sed curl bc lrzsz corkscrew nano \
 
 RUN apt-get install -y liblz4-tool zstd
 
+# Make bash the default shell
+RUN rm /bin/sh
+RUN ln -s /bin/bash /bin/sh
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
 RUN chown -R dev:dev /home/dev
