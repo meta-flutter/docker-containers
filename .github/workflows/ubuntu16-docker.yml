@@ -6,11 +6,6 @@ on:
 
 env:
   IMAGE_NAME: ubuntu-16-dev
-  tags:
-    - 'v*'
-  pull_request:
-    branches:
-      - 'main'
 
 jobs:
 
