@@ -23,16 +23,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: |
-            meta-flutter/ubuntu-18-dev
-            ghcr.io/meta-flutter/ubuntu-18-dev
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-          labels: |
-            org.opencontainers.image.title=ubuntu-18-dev:main
+          images: meta-flutter/ubuntu-18-dev:main
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
