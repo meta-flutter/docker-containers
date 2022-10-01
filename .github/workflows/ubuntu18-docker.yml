@@ -5,7 +5,12 @@ name: ubuntu18-docker-build
      branches: [ main ]
 
  env:
-   IMAGE_NAME: ubuntu-18-dev
+    IMAGE_NAME: ubuntu-18-dev
+    tags:
+       - 'v*'
+   pull_request:
+     branches:
+       - 'main'
 
 jobs:
 

@@ -5,11 +5,16 @@ name: ubuntu16-docker-build
      branches: [ main ]
 
  env:
-   IMAGE_NAME: ubuntu-16-dev
+    IMAGE_NAME: ubuntu-16-dev
+    tags:
+       - 'v*'
+   pull_request:
+     branches:
+       - 'main'
 
 jobs:
 
-   ubuntu-16-dev:
+  ubuntu-16-dev:
      runs-on: [self-hosted, linux]
      permissions:
        packages: write

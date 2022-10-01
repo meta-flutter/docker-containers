@@ -5,7 +5,12 @@ name: ubuntu20-docker-build
      branches: [ main ]
 
  env:
-   IMAGE_NAME: ubuntu-20-dev
+    IMAGE_NAME: ubuntu-20-dev
+    tags:
+       - 'v*'
+   pull_request:
+     branches:
+       - 'main'
 
 jobs:
 
