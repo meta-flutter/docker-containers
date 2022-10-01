@@ -35,8 +35,8 @@ RUN apt-get install -y bsdmainutils sed curl bc lrzsz corkscrew nano \
 RUN apt-get install -y liblz4-tool zstd
 
 # Make bash the default shell
-RUN rm /bin/sh
-RUN ln -s /bin/bash /bin/sh
+RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
+
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
 RUN chown -R dev:dev /home/dev
