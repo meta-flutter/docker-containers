@@ -32,4 +32,5 @@ jobs:
           file: ubuntu-18-dev/Dockerfile
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: meta-flutter/ubuntu-18-dev:latest
+          registry: ghcr.io
+          tags: meta-flutter/ubuntu-18-dev:main
