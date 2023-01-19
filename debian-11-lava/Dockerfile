@@ -10,7 +10,14 @@ USER root
 
 RUN apt update
 RUN apt install -y apt-utils
+
 RUN apt install -y postgresql
+RUN pg_ctlcluster 13 main start
+RUN sleep 10s;tail /var/log/postgresql/postgresql-13-main.log
+USER postgres
+RUN psql -Ac "SELECT version();"
+
+USER root
 RUN apt install -y lava-server
 
 RUN a2dissite 000-default
@@ -18,6 +25,7 @@ RUN a2enmod proxy
 RUN a2enmod proxy_http
 RUN a2ensite lava-server.conf
 RUN service apache2 restart
+RUN tail /var/log/apache2/error.log
 
 RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
 RUN chown -R dev:dev /home/dev
@@ -29,6 +37,8 @@ ENV LANG en_US.UTF-8
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 RUN apt-get update && apt-get install -y git-lfs
 
+RUN apt auto-remove -y
+
 USER dev
 
 WORKDIR /home/dev
@@ -36,3 +46,5 @@ WORKDIR /home/dev
 RUN echo '/home/dev/.ssh/id_rsa' | ssh-keygen -t rsa -b 2048 -C "${USER_EMAIL}"
 RUN git config --global user.email ${USER_EMAIL}
 RUN git config --global user.name "${USER_NAME}"
+
+ENTRYPOINT service postgresql restart && service apache2 restart && /bin/bash
