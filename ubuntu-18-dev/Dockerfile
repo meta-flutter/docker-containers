@@ -34,6 +34,8 @@ RUN apt-get install -y bsdmainutils sed curl bc lrzsz corkscrew nano \
 
 RUN apt-get install -y liblz4-tool zstd
 
+RUN apt-get install -y libxml-simple-perl
+
 # Make bash the default shell
 RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
 
