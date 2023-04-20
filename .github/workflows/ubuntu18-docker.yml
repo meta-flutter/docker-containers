@@ -10,12 +10,24 @@ on:
     branches:
       - 'main'
 
+env:
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
 jobs:
 
   ubuntu-18-dev:
     runs-on: ubuntu-latest
     steps:
-      
+
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1.6
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
       - name: Checkout
         uses: actions/checkout@v3
       
