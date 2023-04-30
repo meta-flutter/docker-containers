@@ -5,7 +5,7 @@ ARG TZ=America/Los_Angeles
 ARG DEBIAN_FRONTEND=noninteractive
 ARG USER_NAME="Joel Winarske"
 ARG USER_EMAIL="joel.winarske@gmail.com"
-ARG RUNNER_UID=1018
+ARG RUNNER_UID=1001
 
 USER root
 
