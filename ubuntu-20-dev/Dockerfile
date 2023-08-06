@@ -9,19 +9,25 @@ ARG RUNNER_UID=1001
 
 USER root
 
-RUN apt-get update && apt-get install -y apt-utils
+RUN apt-get update
+RUN apt-get install -y apt-utils
 
-RUN apt-get update && apt-get install -y tzdata gawk wget git-core diffstat \
-            unzip curl rpm texinfo gcc-multilib build-essential chrpath socat \
-            cpio python python-git-doc python3 python3-pip python3-pexpect \
+RUN apt-get install -y gawk wget git diffstat unzip texinfo \
+            gcc build-essential chrpath socat cpio python3 \
+            python3-pip python3-pexpect xz-utils debianutils \
+            iputils-ping python3-git python3-jinja2 libegl1-mesa \
+            libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev \
+            zstd liblz4-tool
+RUN apt-get install -y tzdata git-core \
+            curl gcc-multilib \
             python3-virtualenv p7zip-full p7zip-rar jq \
-            python3-git python3-jinja2 xz-utils debianutils iputils-ping \
+            python3-git python3-jinja2 xz-utils iputils-ping \
             xterm locales libdatetime-perl libxml-simple-perl libdigest-md5-perl \
             nano gettext cmake libjson-c-dev libmicrohttpd-dev rapidjson-dev \
-            libegl1-mesa libsdl1.2-dev libxkbcommon-dev \
+            libxkbcommon-dev \
             xsltproc docbook-utils fop dblatex xmlto \
             lsb-release software-properties-common rsync srecord gdisk \
-            lz4 zstd libmpc-dev pylint bsdmainutils libgmp-dev  libssl-dev
+            lz4 libmpc-dev pylint bsdmainutils libgmp-dev  libssl-dev
 
 
 RUN pip3 install virtualenv
