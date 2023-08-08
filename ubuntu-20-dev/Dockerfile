@@ -68,11 +68,11 @@ RUN set -ex \
     gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" ; \
   done
 
-# install for python 2
+# install for python 3
 RUN set -ex \
   && mkdir -p /home/dev/bin \
   && export PATH=/home/dev/bin:$PATH \
-  && curl https://storage.googleapis.com/git-repo-downloads/repo-1 > ~/bin/repo \
+  && curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo \
   && chmod a+x /home/dev/bin/repo
 
 RUN set -ex \
