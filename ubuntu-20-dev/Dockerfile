@@ -6,7 +6,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 ARG USER_NAME="Joel Winarske"
 ARG USER_EMAIL="joel.winarske@gmail.com"
 ARG RUNNER_UID=1001
-ARG DOCKER_GROUP_GID=1001
 
 USER root
 
@@ -51,7 +50,7 @@ RUN chown -R dev:dev /home/dev
 
 RUN locale-gen en_US.UTF-8
 
-ENV LANG en_US.UTF-8
+ENV LANG=en_US.UTF-8
 
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 RUN apt-get update && apt-get install -y git-lfs
@@ -85,5 +84,8 @@ RUN set -ex \
   && mkdir -p /home/dev/cmake \
   && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
   && rm -rf cmake-${CMAKE_VERSION}*
+
+ENV DOCKER_HOST=unix:///run/user/1001/podman/podman.sock
+ENV DOCKER_GROUP_GID=1001
 
 RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
