@@ -2,10 +2,11 @@ FROM ubuntu:20.04
 
 ARG CMAKE_VERSION=3.19.0
 ARG TZ=America/Los_Angeles
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ARG USER_NAME="Joel Winarske"
 ARG USER_EMAIL="joel.winarske@gmail.com"
-ARG RUNNER_UID=1001
+ARG RUNNER_USER_UID=1001
+ARG DOCKER_GROUP_GID=121
 
 USER root
 
@@ -45,11 +46,17 @@ RUN apt-get install -y libwayland-dev wayland-protocols \
             libssl-dev libfreetype6-dev libharfbuzz-dev libxi-dev \
             libc++-12-dev libc++abi-12-dev libunwind-dev ninja-build
 
-RUN adduser --disabled-password --gecos '' -u ${RUNNER_UID} dev
+# Runner user
+RUN adduser --disabled-password --gecos '' -u $RUNNER_USER_UID dev \
+    && groupadd docker --gid $DOCKER_GROUP_GID \
+    && usermod -aG sudo dev \
+    && usermod -aG docker dev \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
+
 RUN chown -R dev:dev /home/dev
 
 RUN locale-gen en_US.UTF-8
-
 ENV LANG=en_US.UTF-8
 
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
@@ -84,8 +91,5 @@ RUN set -ex \
   && mkdir -p /home/dev/cmake \
   && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
   && rm -rf cmake-${CMAKE_VERSION}*
-
-ENV DOCKER_HOST=unix:///run/user/1001/podman/podman.sock
-ENV DOCKER_GROUP_GID=1001
 
 RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
