@@ -66,6 +66,8 @@ USER dev
 
 WORKDIR /home/dev
 
+RUN echo export DOCKER_HOST=unix:///run/user/$user_id/podman/podman.sock >>/home/$user_name/.bashrc
+
 RUN echo '/home/dev/.ssh/id_rsa' | ssh-keygen -t rsa -b 2048 -C "${USER_EMAIL}"
 RUN git config --global user.email ${USER_EMAIL}
 RUN git config --global user.name "${USER_NAME}"
