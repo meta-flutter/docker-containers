@@ -66,8 +66,6 @@ USER dev
 
 WORKDIR /home/dev
 
-RUN echo export DOCKER_HOST=unix:///run/user/$user_id/podman/podman.sock >>/home/$user_name/.bashrc
-
 RUN echo '/home/dev/.ssh/id_rsa' | ssh-keygen -t rsa -b 2048 -C "${USER_EMAIL}"
 RUN git config --global user.email ${USER_EMAIL}
 RUN git config --global user.name "${USER_NAME}"
@@ -94,4 +92,5 @@ RUN set -ex \
   && tar xzf cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -C /home/dev/cmake --strip-components=1 \
   && rm -rf cmake-${CMAKE_VERSION}*
 
-RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/dev/.bashrc
+RUN echo 'export DOCKER_HOST=unix:///run/user/$user_id/podman/podman.sock' >> /home/$USER_NAME/.bashrc
+RUN echo 'export PATH=/home/dev/bin:/home/dev/cmake/bin:$PATH' >> /home/$USER_NAME/.bashrc
