@@ -1,0 +1,42 @@
+name: ubuntu22-user-docker-build
+
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - 'main'
+
+env:
+  REGISTRY_USER: ${{ github.actor }}
+  REGISTRY_PASSWORD: ${{ github.token }}
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+jobs:
+
+  ubuntu-22-user:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Log in to ghcr.io
+        uses: redhat-actions/podman-login@v1.6
+        with:
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+          registry: ${{ env.IMAGE_REGISTRY }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - uses: mr-smithers-excellent/docker-build-push@v5
+        name: Build & push Docker image
+        with:
+          image: meta-flutter/ubuntu-22-user
+          tags: main
+          registry: ghcr.io
+          dockerfile: ubuntu-22-user/Dockerfile
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
