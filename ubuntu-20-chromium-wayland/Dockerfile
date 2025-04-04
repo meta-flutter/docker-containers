@@ -18,7 +18,7 @@ RUN apt-get install -y gawk wget git diffstat unzip texinfo \
             python3-pip python3-pexpect xz-utils debianutils \
             iputils-ping python3-git python3-jinja2 libegl1-mesa \
             libsdl1.2-dev pylint3 xterm python3-subunit mesa-common-dev \
-            zstd liblz4-tool python
+            zstd liblz4-tool python ninja-build
 RUN apt-get install -y tzdata git-core \
             curl gcc-multilib \
             python3-virtualenv p7zip-full p7zip-rar jq \
