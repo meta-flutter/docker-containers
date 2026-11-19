@@ -19,7 +19,7 @@ RUN apt-get upgrade -y
 RUN apt-get install -y \
   curl lsb-release software-properties-common gnupg apt-file \
   build-essential libtool chrpath cpio debianutils diffstat file \
-  gawk gcc git iputils-ping libacl1 locales python3 python3-git \
+  gawk gcc git iproute2 iputils-ping libacl1 locales python3 python3-git \
   python3-jinja2 python3-pexpect python3-pip python3-subunit socat \
   texinfo unzip wget xz-utils zstd lz4
 
